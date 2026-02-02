@@ -1,0 +1,2 @@
+# Agentic-Conversational-AI-for-Social-to-Lead-Conversion
+Detects user intent (greeting, product inquiry, high-intent lead)  Uses RAG (Retrieval-Augmented Generation) from a local knowledge base to answer pricing &amp; policy questions accurately  Maintains conversation state across multiple turns  Triggers backend actions (lead capture) only after all required details are collected — no premature tool calls
