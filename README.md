@@ -1,189 +1,31 @@
-# Agentic-Conversational-AI-for-Social-to-Lead-Conversion
-🧠 Social-to-Lead Conversational AI Agent
+# AutoStream Conversational AI Agent
 
-This project implements a stateful, agentic Conversational AI system that converts user conversations into qualified business leads.
-It goes beyond a traditional chatbot by combining intent detection, Retrieval-Augmented Generation (RAG), explicit state management, and guarded tool execution.
+This project implements a conversational AI agent for AutoStream, a SaaS product providing automated video editing tools for content creators. The agent classifies user intents, retrieves information from a local knowledge base, and captures leads when users show high intent.
 
-The agent is built for a fictional SaaS product AutoStream, which provides automated video editing tools for content creators.
+## How to Run the Project Locally
 
-✨ Key Capabilities
+1. Ensure Python 3.9+ is installed.
+2. Install dependencies: `pip install -r requirements.txt`
+3. (Optional) Set up OpenAI API key in a `.env` file: `OPENAI_API_KEY=your_key_here`
+4. Run the agent: `python main.py`
+5. Interact with the agent in the console. Type 'quit' to exit.
 
-✅ Intent Identification
+## Architecture Explanation
 
-Classifies user intent into:
+The AutoStream AI Agent is built using standard Python with a modular architecture for maintainability and simplicity. The core components include:
 
-Casual greeting
+- **State Management (state.py)**: Maintains conversation history, detected intent, user information, and lead completion status across multiple turns using a simple class-based approach.
 
-Product / pricing inquiry
+- **Intent Classification (intent.py)**: Uses keyword-based matching to classify user messages into three categories: greeting, product_or_pricing_inquiry, and high_intent_lead. This deterministic approach ensures consistent intent detection without relying on external models.
 
-High-intent lead (ready to sign up)
+- **Knowledge Retrieval (rag.py)**: Implements a simplified RAG system by searching a local JSON knowledge base for relevant information. It matches query keywords to pricing, features, and policy data, returning accurate responses without hallucinations.
 
-📚 RAG-Powered Knowledge Retrieval
+- **Lead Capture (tools.py)**: Manages the lead collection process, asking for name, email, and platform sequentially. The mock_lead_capture function is called only when all required information is collected.
 
-Answers pricing and policy questions using a local knowledge base
+- **Main Agent (main.py)**: Orchestrates the conversation flow, integrating all components. It uses OpenAI's API if available, falling back to a mock LLM for responses. The console-based interface allows for interactive testing.
 
-Prevents hallucination by grounding responses in factual data
+This architecture prioritizes robustness and simplicity, avoiding complex frameworks while ensuring stateful, context-aware conversations. The agent can handle multi-turn dialogues, retrieve accurate information, and capture leads efficiently.
 
-🧠 Stateful Multi-Turn Conversations
+## WhatsApp Integration
 
-Retains memory across multiple conversation turns
-
-Tracks collected user details and conversation progress
-
-🔐 Guarded Tool Execution
-
-Captures leads only after all required information is collected
-
-Prevents premature or unsafe backend actions
-
-🖥️ Interactive UI
-
-Streamlit-based chat interface for real-time interaction
-
-🏗️ Project Architecture (High-Level)
-User (Streamlit UI)
-        ↓
-Intent Detection
-        ↓
-Decision Logic (State)
-        ↓
-RAG Knowledge Retrieval
-        ↓
-Tool Execution (Lead Capture)
-
-
-The entire system revolves around explicit state management, ensuring reliability and control across multi-turn conversations.
-
-📁 Project Structure
-.
-├── agent/
-│   ├── agent.py        # Agent orchestration & decision logic
-│   ├── intent.py       # Intent classification
-│   ├── rag.py          # RAG pipeline using local knowledge base
-│   ├── state.py        # Conversation state management
-│   └── tools.py        # Backend tool (lead capture)
-│
-├── data/
-│   └── knowledge_base.json   # Pricing & policy data
-│
-├── streamlit_app.py    # Streamlit UI
-├── main.py             # Entry point (CLI / local run)
-├── test_agent.py       # Basic testing
-├── requirements.txt
-└── README.md
-
-🔍 How It Works (Step-by-Step)
-
-User Input
-
-User sends a message via the Streamlit UI
-
-Intent Detection
-
-The system classifies the intent of the message
-
-Determines whether the user is exploring or ready to convert
-
-Decision Logic
-
-Based on intent and conversation state, the agent decides:
-
-Answer via RAG
-
-Ask for lead details
-
-Trigger backend action
-
-RAG (Retrieval-Augmented Generation)
-
-Relevant information is retrieved from knowledge_base.json
-
-The LLM generates a grounded response using retrieved data
-
-State Update
-
-User-provided details (name, email, platform) are stored incrementally
-
-Tool Execution
-
-Once all required fields are collected, the lead capture tool is executed safely
-
-🧠 Why RAG Is Used
-
-RAG ensures:
-
-Accurate pricing information
-
-Consistent policy answers
-
-Zero hallucination for business-critical data
-
-All knowledge is stored locally and retrieved dynamically, making updates easy without code changes.
-
-⚙️ Tech Stack
-
-Language: Python 3.9+
-
-UI: Streamlit
-
-LLM: GPT-4o-mini / Gemini 1.5 Flash / Claude 3 Haiku
-
-Architecture Pattern: Agentic workflow with explicit state management
-
-Knowledge Base: JSON (local)
-
-Backend Actions: Mock API tool for lead capture
-
-▶️ How to Run Locally
-1️⃣ Clone the repository
-git clone <repo-url>
-cd <repo-name>
-
-2️⃣ Install dependencies
-pip install -r requirements.txt
-
-3️⃣ Set environment variables
-
-Create a .env file:
-
-OPENAI_API_KEY=your_api_key_here
-
-4️⃣ Run the Streamlit app
-streamlit run streamlit_app.py
-
-📦 Lead Capture Tool
-def mock_lead_capture(name, email, platform):
-    print(f"Lead captured successfully: {name}, {email}, {platform}")
-
-
-The tool is triggered only when all required fields are present, ensuring safe and deterministic execution.
-
-📲 WhatsApp Integration (Conceptual)
-
-To integrate this agent with WhatsApp:
-
-Use WhatsApp Business API
-
-Receive messages via Webhook
-
-Forward messages to the agent backend
-
-Maintain state per user using session IDs
-
-Send agent responses back through WhatsApp API
-
-This architecture supports real-time, scalable deployment.
-
-🎯 Key Learnings
-
-Agentic systems require control flow, not just prompts
-
-State management is critical for real-world AI reliability
-
-Tool execution must be logic-driven, not model-driven
-
-RAG is essential for factual accuracy in production systems
-
-📌 Conclusion
-
-This project demonstrates how to build a production-style conversational AI agent that combines reasoning, memory, and action — moving beyond chatbots to real-world AI systems.
+To integrate this agent with WhatsApp, use the WhatsApp Business API with webhooks. Set up a Flask or FastAPI server to receive webhook messages from WhatsApp. When a message is received, extract the user input, process it through the agent, and send the response back via the WhatsApp API. Handle message threading by storing conversation state in a database (e.g., SQLite or Redis) keyed by user phone number. Ensure compliance with WhatsApp's rate limits and message formatting requirements. Use ngrok or a similar tool for local development to expose the webhook endpoint.

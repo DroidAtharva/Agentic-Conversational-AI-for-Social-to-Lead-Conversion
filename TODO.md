@@ -1,0 +1,6 @@
+- [x] Create knowledge base JSON
+- [x] Set up requirements.txt
+- [x] Implement agent logic with LangGraph
+- [x] Create main.py for running the agent
+- [x] Write README.md
+- [ ] Record demo video (user needs to do this)
